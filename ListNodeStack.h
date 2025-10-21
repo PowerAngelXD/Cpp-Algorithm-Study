@@ -1,5 +1,5 @@
-#ifndef BALL_STACK_H
-#define BALL_STACK_H
+#ifndef BALL_LISTNODESTACK_H
+#define BALL_LISTNODESTACK_H
 
 #include <iostream>
 

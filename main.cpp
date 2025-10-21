@@ -1,13 +1,33 @@
 #include <iostream>
-#include <chrono>
+#include <string>
+#include <algorithm> 
+#include <vector>
+#include <sstream>
 
-#include "List.h"
-#include "Stack.h"
-#include "Tree.h"
-
-// ----------------------------
+#include "ArrayStack.h"
 
 int main() {
-    test_BST();
+    Stack<5> stack;
 
+    stack.Push(9);
+
+    stack.PrintAll();
+
+    std::cout << "-----------------" << std::endl;
+
+    stack.Push(8);
+    stack.Push(2);
+    stack.Push(40);
+    stack.Push(15);
+    stack.Push(99);
+
+    stack.PrintAll();
+
+    std::cout << "-----------------" << std::endl;
+
+    stack.Pop();
+    stack.Pop();
+    stack.PrintAll();
+    
+    return 0;
 }
