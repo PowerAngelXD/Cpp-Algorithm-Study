@@ -10,8 +10,8 @@ struct ListNode {
 };
 
 bool isCircle_fsPtr(ListNode head) {
-    auto fast_ptr = &head;
-    auto slow_ptr = &head;
+    ListNode* fast_ptr = &head;
+    ListNode* slow_ptr = &head;
     while (fast_ptr && fast_ptr->nextPtr) {
         fast_ptr = fast_ptr->nextPtr->nextPtr;
         slow_ptr = slow_ptr->nextPtr;
@@ -49,7 +49,8 @@ void printA(ListNode head) {
 }
 
 void insert(ListNode &begin, int element) {
-    auto after = begin.nextPtr;
+    ListNode* after = begin.nextPtr;
+    // (ListNode*)malloc(sizeof(ListNode));
     begin.nextPtr = new ListNode {element};
     begin.nextPtr->nextPtr = after;
 }

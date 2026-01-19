@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(table)
+project(cppal)
 
-add_executable(table main.cpp ArrayStack.h Tree.h)
+file(GLOB SOURCES "*.cpp")
+file(GLOB HEADERS "*.h")
+
+add_executable(cppal ${SOURCES} ${HEADERS})

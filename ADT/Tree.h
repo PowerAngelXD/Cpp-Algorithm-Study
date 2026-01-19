@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <vector>
+#include <stack>
+#include <map>
 
 struct TreeNode {
     int val = 0;
@@ -13,6 +15,7 @@ struct TreeNode {
 
     TreeNode& addChild(int v) {
         subs.push_back(new TreeNode(v));
+        return *this;
     }
 
     void preorderTraversal() {
@@ -31,11 +34,16 @@ struct TreeNode {
     }
 
     void postorderTraversal() {
+        std::cout << "{";
+
         for (auto node: subs) {
             node->postorderTraversal();
         }
 
-        std::cout << val << std::endl;
+        if (subs.empty())
+            std::cout << "sub: " << val << "}";
+        else
+            std::cout << "(" << val << ")}";
     }
 };
 
@@ -54,17 +62,16 @@ void test_normal_tree() {
     root.subs.at(1)->subs.push_back(new TreeNode(14));
     root.subs.at(3)->subs.push_back(new TreeNode(15));
 
-    root.preorderTraversal();
-    std::cout << std::endl;
     root.postorderTraversal();
 }
 
+template<typename T>
 struct BinaryNode {
-    int val;
+    T val;
     BinaryNode* left = nullptr;
     BinaryNode* right = nullptr;
 
-    BinaryNode(int v): val(v) {}
+    BinaryNode(T v): val(v) {}
 
     void preorderTraversal() {
         if (this == nullptr) return;
@@ -77,7 +84,7 @@ struct BinaryNode {
     }
 };
 
-void BSTinsert(BinaryNode*& bin_tree, int element) {
+void BSTinsert(BinaryNode<int>*& bin_tree, int element) {
     if (!bin_tree) {
         bin_tree = new BinaryNode(element);
         return;
@@ -106,4 +113,48 @@ void test_BST() {
     root->preorderTraversal();
 }
 
+void binaryExprConstruct(std::string expr) {
+    std::stack<BinaryNode<char>*> runtime;
+    for (auto ch: expr) {
+        if (isdigit(ch))
+            runtime.push(new BinaryNode(ch));
+        else {
+            auto right = runtime.top(); runtime.pop();
+            auto left = runtime.top(); runtime.pop();
+            auto node = new BinaryNode(ch);
+            node->left = left;
+            node->right = right;
+            runtime.push(node);
+        }
+    }
+
+    runtime.top()->preorderTraversal();
+}
+
+BinaryNode<char>* preInBuild(std::string preorder, std::string inorder) {
+    if (preorder.empty()) return nullptr;
+
+    char rootVal = preorder[0];
+    auto root = new BinaryNode<char>(rootVal);
+
+    int split = inorder.find(rootVal);
+
+    root->left = preInBuild(preorder.substr(1, split), inorder.substr(0, split));
+    root->right = preInBuild(preorder.substr(1 + split), inorder.substr(split + 1));
+
+    return root;
+}
+
+BinaryNode<char>* postInBuild(std::string postorder, std::string inorder) {
+    if (postorder.empty()) return nullptr;
+
+    char rootVal = postorder.back();
+    auto root = new BinaryNode<char>(rootVal);
+
+    int split = inorder.find(rootVal);
+
+    root->left = postInBuild(postorder.substr(0, split), inorder.substr(0, split));
+    root->right = postInBuild(postorder.substr(split, postorder.size() - 1 - split), inorder.substr(split + 1));
+    return root;
+}
 #endif
